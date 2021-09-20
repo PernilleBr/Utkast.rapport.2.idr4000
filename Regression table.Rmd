@@ -1,0 +1,36 @@
+---
+title: "Regression"
+author: "Pernille Breili"
+date: "9/20/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(exscidata)
+library(ggplot2)
+library(broom)
+library(knitr)
+data("hypertrophy")
+
+dat <- hypertrophy %>%
+  select(PARTICIPANT, SQUAT_3RM, PERCENT_TYPE_II_T1) %>%
+  print()
+
+ggplot(dat, aes(SQUAT_3RM, PERCENT_TYPE_II_T1)) + 
+  geom_point(size = 3, fill = "lightblue", shape = 21) +
+  labs(x = "Squat 3RM (kg)", 
+       y = "Type II fibres (%)") +
+  theme_minimal() 
+
+m1 <- lm(SQUAT_3RM ~ PERCENT_TYPE_II_T1, data = dat)
+
+summary(m1)
+plot(m1)
+
+tidy(m1) %>%
+        kable(col.names = c("", "Estimate", "SE", "t-statistic", "p-value"), 
+              digits = c(NA, 2, 1, 2, 3))
+
+```
+
